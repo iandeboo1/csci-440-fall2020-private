@@ -2,6 +2,7 @@ package edu.montana.csci.csci440.model;
 
 import edu.montana.csci.csci440.util.DB;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -25,40 +26,9 @@ public class Employee extends Model {
         employeeId = results.getLong("EmployeeId");
     }
 
-    public static List<Employee> all(int page, int count) {
-        try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM employees LIMIT ?"
-             )) {
-            stmt.setInt(1, count);
-            ResultSet results = stmt.executeQuery();
-            List<Employee> resultList = new LinkedList<>();
-            while (results.next()) {
-                resultList.add(new Employee(results));
-            }
-            return resultList;
-        } catch (SQLException sqlException) {
-            throw new RuntimeException(sqlException);
-        }
-    }
-
-    public static Employee findByEmail(String newEmailAddress) {
-        throw new UnsupportedOperationException("Implement me");
-    }
-
-    public static Employee find(long employeeId) {
-        try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM employees WHERE EmployeeId=?")) {
-            stmt.setLong(1, employeeId);
-            ResultSet results = stmt.executeQuery();
-            if (results.next()) {
-                return new Employee(results);
-            } else {
-                return null;
-            }
-        } catch (SQLException sqlException) {
-            throw new RuntimeException(sqlException);
-        }
+    public static List<Employee.SalesSummary> getSalesSummaries() {
+        //TODO - a GROUP BY query to determine the sales, using the SalesSummary class
+        return Collections.emptyList();
     }
 
     @Override
@@ -102,7 +72,7 @@ public class Employee extends Model {
                 stmt.setString(2, this.getLastName());
                 stmt.setString(3, this.getEmail());
                 stmt.executeUpdate();
-                employeeId = DB.getLastID();
+                employeeId = DB.getLastID(conn);
                 return true;
             } catch (SQLException sqlException) {
                 throw new RuntimeException(sqlException);
@@ -148,13 +118,101 @@ public class Employee extends Model {
     }
 
     public List<Customer> getCustomers() {
-        return Collections.emptyList();
+        return Customer.forEmployee(employeeId);
     }
+
     public List<Employee> getReports() {
-        return Collections.emptyList();
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT * FROM employees WHERE ReportsTo=?"
+             )) {
+            stmt.setLong(1, this.getEmployeeId());
+            ResultSet results = stmt.executeQuery();
+            List<Employee> resultList = new LinkedList<>();
+            while (results.next()) {
+                resultList.add(new Employee(results));
+            }
+            return resultList;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
     public Employee getBoss() {
         return null;
     }
 
+    public static List<Employee> all() {
+        return all(0, Integer.MAX_VALUE);
+    }
+
+    public static List<Employee> all(int page, int count) {
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT * FROM employees LIMIT ?"
+             )) {
+            stmt.setInt(1, count);
+            ResultSet results = stmt.executeQuery();
+            List<Employee> resultList = new LinkedList<>();
+            while (results.next()) {
+                resultList.add(new Employee(results));
+            }
+            return resultList;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
+    }
+
+    public static Employee findByEmail(String newEmailAddress) {
+        throw new UnsupportedOperationException("Implement me");
+    }
+
+    public static Employee find(long employeeId) {
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM employees WHERE EmployeeId=?")) {
+            stmt.setLong(1, employeeId);
+            ResultSet results = stmt.executeQuery();
+            if (results.next()) {
+                return new Employee(results);
+            } else {
+                return null;
+            }
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
+    }
+
+    public static class SalesSummary {
+        String firstName;
+        String lastName;
+        String email;
+        Long salesCount;
+        BigDecimal salesTotals;
+        private SalesSummary(ResultSet results) throws SQLException {
+            firstName = results.getString("FirstName");
+            lastName = results.getString("LastName");
+            email = results.getString("Email");
+            salesCount = results.getLong("SalesCount");
+            salesTotals = results.getBigDecimal("SalesTotal");
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public Long getSalesCount() {
+            return salesCount;
+        }
+
+        public BigDecimal getSalesTotals() {
+            return salesTotals;
+        }
+    }
 }
