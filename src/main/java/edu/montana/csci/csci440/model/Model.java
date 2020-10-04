@@ -9,9 +9,7 @@ public class Model {
 
     List<String> _errors = new LinkedList<>();
 
-    public boolean create() {
-        throw new UnsupportedOperationException("Needs to be implemented");
-    }
+    public boolean create() { throw new UnsupportedOperationException("Needs to be implemented"); }
 
     public boolean update() {
         throw new UnsupportedOperationException("Needs to be implemented");
@@ -21,9 +19,7 @@ public class Model {
         throw new UnsupportedOperationException("Needs to be implemented");
     }
 
-    public boolean verify() {
-        throw new UnsupportedOperationException("Needs to be implemented");
-    }
+    public boolean verify() { throw new UnsupportedOperationException("Needs to be implemented"); }
 
     public void addError(String err) {
         _errors.add(err);
