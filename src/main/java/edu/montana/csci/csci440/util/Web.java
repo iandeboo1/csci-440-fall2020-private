@@ -153,6 +153,21 @@ public class Web {
     public String nextPage(List collection){
         if (collection.size() == PAGE_SIZE) {
             Integer page = getPage();
+            //not sure if I should be editing here
+            if (getRequest().queryString() != null) {
+                if (getRequest().queryString().startsWith("q")) {
+                    if (page == 1) {
+                        return "<a href='" + getRequest().pathInfo() + "?" + getRequest().queryString() + "&page=" + (page + 1) + getOrderBy() + "'>Next Page &gt;&gt;</a>";
+                    } else {
+                        String clearedPageParamQuery = getRequest().queryString().substring(0, getRequest().queryString().length() - 7);
+                        return "<a href='" + getRequest().pathInfo() + "?" + clearedPageParamQuery + "&page=" + (page + 1) + getOrderBy() + "'>Next Page &gt;&gt;</a>";
+                    }
+
+                } else {
+                    return "<a href='" + getRequest().pathInfo() + "?page=" + (page + 1) + getOrderBy() + "'>Next Page &gt;&gt;</a>";
+                }
+            }
+            //not sure if I should be editing here
             return "<a href='" + getRequest().pathInfo() + "?page=" + (page + 1) + getOrderBy() + "'>Next Page &gt;&gt;</a>";
         } else {
             return "";
@@ -180,8 +195,28 @@ public class Web {
     public String prevPage() {
         Integer page = getPage();
         if (page > 2) {
+            //not sure if I should be editing here
+            if (getRequest().queryString() != null) {
+                if (getRequest().queryString().startsWith("q")) {
+                    String clearedPageParamQuery = getRequest().queryString().substring(0, getRequest().queryString().length() - 7);
+                    return "<a href='" + getRequest().pathInfo() + "?" + clearedPageParamQuery + "&page=" + (page - 1) + getOrderBy() + "'>&lt;&lt;  Previous Page</a>";
+                } else {
+                    return "<a href='" + getRequest().pathInfo() + "?page=" + (page - 1) + getOrderBy() + "'>&lt;&lt;  Previous Page</a>";
+                }
+            }
+            //not sure if I should be editing here
             return "<a href='" + getRequest().pathInfo() + "?page=" + (page - 1) + getOrderBy() + "'>&lt;&lt;  Previous Page</a>";
         } else if (page == 2) {
+            //not sure if I should be editing here
+            if (getRequest().queryString() != null) {
+                if (getRequest().queryString().startsWith("q")) {
+                    String clearedPageParamQuery = getRequest().queryString().substring(0, getRequest().queryString().length() - 7);
+                    return "<a href='" + getRequest().pathInfo() + "?" + clearedPageParamQuery + getOrderBy() + "'>&lt;&lt;  Previous Page</a>";
+                } else {
+                    return "<a href='" + getRequest().pathInfo() + "?" + getOrderBy() + "'>&lt;&lt;  Previous Page</a>";
+                }
+            }
+            //not sure if I should be editing here
             return "<a href='" + getRequest().pathInfo() + "?" + getOrderBy() + "'>&lt;&lt;  Previous Page</a>";
         } else {
             return "";
