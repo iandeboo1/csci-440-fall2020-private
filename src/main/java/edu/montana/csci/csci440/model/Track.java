@@ -1,6 +1,7 @@
 package edu.montana.csci.csci440.model;
 
 import edu.montana.csci.csci440.util.DB;
+import edu.montana.csci.csci440.util.Web;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -334,9 +335,12 @@ public class Track extends Model {
     public static List<Track> all(int page, int count, String orderBy) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM tracks ORDER BY TrackId LIMIT ? OFFSET ?")) {
-            stmt.setInt(1, count);
-            stmt.setInt(2, (page - 1) * 10);
+                     "SELECT * FROM tracks ORDER BY ? LIMIT ? OFFSET ?")) {
+            System.out.println(orderBy);
+            //TODO: ORDER BY DOESN'T SEEM TO BE WORKING EVEN THOUGH URL UPDATES
+            stmt.setString(1, orderBy);
+            stmt.setInt(2, count);
+            stmt.setInt(3, (page - 1) * 10);
             ResultSet results = stmt.executeQuery();
             List<Track> resultList = new LinkedList<>();
             while (results.next()) {
@@ -347,4 +351,25 @@ public class Track extends Model {
             throw new RuntimeException(sqlException);
         }
     }
+
+    public static List<Track> getForPlaylist(long playlistId) {
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT * FROM tracks JOIN playlist_track ON tracks.TrackId = playlist_track.TrackId " +
+                             "JOIN playlists ON playlist_track.PlaylistId = playlists.PlaylistId " +
+                             "WHERE playlists.PlaylistId=? LIMIT ? OFFSET ?")) {
+            stmt.setLong(1, playlistId);
+            stmt.setInt(2, Web.PAGE_SIZE);
+            stmt.setInt(3, (Web.getPage() - 1) * 10);
+            ResultSet results = stmt.executeQuery();
+            List<Track> resultList = new LinkedList<>();
+            while (results.next()) {
+                resultList.add(new Track(results));
+            }
+            return resultList;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
+    }
+
 }

@@ -42,6 +42,7 @@
     </tbody>
 </table>
 
+$web.pagingWidget($playlist.tracks)
 
 <a href="/playlists/$playlist.PlaylistId/edit">[Edit Playlist]</a>
 <a href="/playlists/$playlist.PlaylistId/delete">[Delete Playlist]</a>

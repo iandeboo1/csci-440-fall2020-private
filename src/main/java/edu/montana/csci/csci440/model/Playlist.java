@@ -25,7 +25,7 @@ public class Playlist extends Model {
 
 
     public List<Track> getTracks(){
-        return Collections.emptyList();
+        return Track.getForPlaylist(playlistId);
     }
 
     public long getPlaylistId() {
@@ -47,9 +47,10 @@ public class Playlist extends Model {
     public static List<Playlist> all(int page, int count) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM playlists LIMIT ?"
+                     "SELECT * FROM playlists LIMIT ? OFFSET ?"
              )) {
             stmt.setInt(1, count);
+            stmt.setInt(2, (page - 1) * 10);
             ResultSet results = stmt.executeQuery();
             List<Playlist> resultList = new LinkedList<>();
             while (results.next()) {
