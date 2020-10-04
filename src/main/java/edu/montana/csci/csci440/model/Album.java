@@ -2,6 +2,7 @@ package edu.montana.csci.csci440.model;
 
 import edu.montana.csci.csci440.util.DB;
 
+import javax.xml.namespace.QName;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,12 +18,77 @@ public class Album extends Model {
     String title;
 
     public Album() {
+        // new album for insert
     }
 
     private Album(ResultSet results) throws SQLException {
         title = results.getString("Title");
         albumId = results.getLong("AlbumId");
         artistId = results.getLong("ArtistId");
+    }
+
+    //TODO: FIGURE OUT WHAT ARTIST.VALIDATE IS AND HOW TO IMPLEMENT IT
+
+    @Override
+    public boolean verify() {
+        if (title == null || "".equals(title)) {
+            addError("Title can't be null or blank!");
+        }
+        return !hasErrors();
+    }
+
+    @Override
+    public boolean update() {
+        if (verify()) {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "UPDATE albums SET Title=?, ArtistId=? WHERE AlbumID=?")) {
+                stmt.setString(1, this.getTitle());
+                //TODO: ONLY CHANGES THE TITLE, WON'T SAVE CHANGES TO ARTIST
+                stmt.setLong(2, this.getArtistId());
+                stmt.setLong(3, this.getAlbumId());
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean create() {
+        if (verify()) {
+            System.out.println("\n" + albumId);
+            System.out.println("\n" + artistId);
+            System.out.println("\n" + title);
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "INSERT INTO albums (Title, ArtistId) VALUES (?, ?)")) {
+                stmt.setString(1, this.getTitle());
+                stmt.setLong(2, this.getArtistId());
+                stmt.executeUpdate();
+                albumId = DB.getLastID(conn);
+                return true;
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void delete() {
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "DELETE FROM albums WHERE AlbumID=?")) {
+            stmt.setLong(1, this.getAlbumId());
+            stmt.executeUpdate();
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
 
     public Artist getArtist() {
@@ -53,6 +119,10 @@ public class Album extends Model {
         return artistId;
     }
 
+    public void setArtistId(long artistId) {
+        this.artistId = artistId;
+    }
+
     public static List<Album> all() {
         return all(0, Integer.MAX_VALUE);
     }
@@ -60,9 +130,9 @@ public class Album extends Model {
     public static List<Album> all(int page, int count) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM albums LIMIT ?"
-             )) {
+                     "SELECT * FROM albums ORDER BY AlbumID LIMIT ? OFFSET ?")) {
             stmt.setInt(1, count);
+            stmt.setInt(2, (page - 1) * 10);
             ResultSet results = stmt.executeQuery();
             List<Album> resultList = new LinkedList<>();
             while (results.next()) {
@@ -76,8 +146,8 @@ public class Album extends Model {
 
     public static Album find(long i) {
         try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM albums WHERE AlbumId=?"
-             )) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT * FROM albums WHERE AlbumId=?")) {
             stmt.setLong(1, i);
             ResultSet results = stmt.executeQuery();
             if (results.next()) {

@@ -39,7 +39,8 @@ public class Artist extends Model {
     public boolean update() {
         if (verify()) {
             try (Connection conn = DB.connect();
-                 PreparedStatement stmt = conn.prepareStatement("UPDATE artist SET Name=? WHERE ArtistID=?")) {
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "UPDATE artist SET Name=? WHERE ArtistID=?")) {
                 stmt.setString(1, this.getName());
                 stmt.setLong(2, this.getArtistId());
                 stmt.executeUpdate();
@@ -108,7 +109,7 @@ public class Artist extends Model {
     public static List<Artist> all(int page, int count) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM artists ORDER BY artistID LIMIT ? OFFSET ?"
+                     "SELECT * FROM artists ORDER BY ArtistID LIMIT ? OFFSET ?"
              )) {
             stmt.setInt(1, count);
             stmt.setInt(2, (page - 1) * 10);

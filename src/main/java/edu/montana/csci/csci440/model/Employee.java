@@ -124,8 +124,7 @@ public class Employee extends Model {
     public List<Employee> getReports() {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM employees WHERE ReportsTo=?"
-             )) {
+                     "SELECT * FROM employees WHERE ReportsTo=?")) {
             stmt.setLong(1, this.getEmployeeId());
             ResultSet results = stmt.executeQuery();
             List<Employee> resultList = new LinkedList<>();
@@ -148,8 +147,7 @@ public class Employee extends Model {
     public static List<Employee> all(int page, int count) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM employees LIMIT ?"
-             )) {
+                     "SELECT * FROM employees LIMIT ?")) {
             stmt.setInt(1, count);
             ResultSet results = stmt.executeQuery();
             List<Employee> resultList = new LinkedList<>();

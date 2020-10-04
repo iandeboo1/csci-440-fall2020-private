@@ -39,9 +39,81 @@ public class Track extends Model {
         genreId = results.getLong("GenreId");
     }
 
+    //TODO: FIGURE OUT WHAT TRACKS.VALIDATE IS AND HOW TO IMPLEMENT IT
+
+    @Override
+    public boolean verify() {
+        if (name == null || "".equals(name)) {
+            addError("Name can't be null or blank!");
+        }
+        return !hasErrors();
+        //TODO: DON'T KNOW HOW TO VERIFY REST OF VALUES
+    }
+
+    @Override
+    public boolean update() {
+        if (verify()) {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "UPDATE tracks SET Name=?, Milliseconds=?, Bytes=?, UnitPrice=?, AlbumId=?, MediaTypeId=?, GenreId=? WHERE TrackId=?")) {
+                stmt.setString(1, this.getName());
+                stmt.setLong(2, this.getMilliseconds());
+                stmt.setLong(3, this.getBytes());
+                stmt.setBigDecimal(4, this.getUnitPrice());
+                stmt.setLong(5, this.getAlbumId());
+                stmt.setLong(6, this.getMediaTypeId());
+                stmt.setLong(7, this.getGenreId());
+                stmt.setLong(8, this.getTrackId());
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean create() {
+        if (verify()) {
+            try (Connection conn = DB.connect();
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "INSERT INTO tracks (Name, Milliseconds, Bytes, UnitPrice, AlbumId, MediaTypeId, GenreId) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                stmt.setString(1, this.getName());
+                stmt.setLong(2, this.getMilliseconds());
+                stmt.setLong(3, this.getBytes());
+                stmt.setBigDecimal(4, this.getUnitPrice());
+                stmt.setLong(5, this.getAlbumId());
+                stmt.setLong(6, this.getMediaTypeId());
+                stmt.setLong(7, this.getGenreId());
+                stmt.executeUpdate();
+                trackId = DB.getLastID(conn);
+                return true;
+            } catch (SQLException sqlException) {
+                throw new RuntimeException(sqlException);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void delete() {
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "DELETE FROM tracks WHERE TrackId=?")) {
+            stmt.setLong(1, this.getTrackId());
+            stmt.executeUpdate();
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
+    }
+
     public static Track find(int i) {
         try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM tracks WHERE TrackId=?")) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT * FROM tracks WHERE TrackId=?")) {
             stmt.setLong(1, i);
             ResultSet results = stmt.executeQuery();
             if (results.next()) {
@@ -56,7 +128,8 @@ public class Track extends Model {
 
     public static long count() {
         try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) as Count FROM tracks")) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT COUNT(*) as Count FROM tracks")) {
             ResultSet results = stmt.executeQuery();
             if (results.next()) {
                 return results.getLong("Count");
@@ -234,9 +307,9 @@ public class Track extends Model {
     public static List<Track> all(int page, int count, String orderBy) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM tracks LIMIT ?"
-             )) {
+                     "SELECT * FROM tracks ORDER BY TrackId LIMIT ? OFFSET ?")) {
             stmt.setInt(1, count);
+            stmt.setInt(2, (page - 1) * 10);
             ResultSet results = stmt.executeQuery();
             List<Track> resultList = new LinkedList<>();
             while (results.next()) {

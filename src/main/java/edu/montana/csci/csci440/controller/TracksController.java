@@ -19,7 +19,7 @@ public class TracksController {
 
         post("/tracks/new", (req, resp) -> {
             Track track = new Track();
-            Web.putValuesInto(track, "Name", "Milliseconds", "Bytes", "UnitPrice");
+            Web.putValuesInto(track, "Name", "Milliseconds", "Bytes", "UnitPrice", "AlbumId", "MediaTypeId", "GenreId");
             if (track.create()) {
                 Web.message("Created A Track!");
                 return Web.redirect("/tracks/" + track.getTrackId());
@@ -74,7 +74,7 @@ public class TracksController {
 
         post("/tracks/:id", (req, resp) -> {
             Track track = Track.find(Integer.parseInt(req.params(":id")));
-            Web.putValuesInto(track, "Name", "Milliseconds", "Bytes", "UnitPrice");
+            Web.putValuesInto(track, "Name", "Milliseconds", "Bytes", "UnitPrice", "AlbumId", "MediaTypeId", "GenreId");
             if (track.update()) {
                 Web.message("Updated Track!");
                 return Web.redirect("/tracks/" + track.getTrackId());
