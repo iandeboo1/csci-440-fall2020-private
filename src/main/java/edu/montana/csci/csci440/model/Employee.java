@@ -124,7 +124,7 @@ public class Employee extends Model {
     public List<Employee> getReports() {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM employees WHERE ReportsTo=?")) {
+                     "SELECT * FROM employees  WHERE employees.ReportsTo=?")) {
             stmt.setLong(1, this.getEmployeeId());
             ResultSet results = stmt.executeQuery();
             List<Employee> resultList = new LinkedList<>();
@@ -137,7 +137,15 @@ public class Employee extends Model {
         }
     }
     public Employee getBoss() {
-        return null;
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT bosses.* FROM employees JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId WHERE employees.EmployeeId=?")) {
+            stmt.setLong(1, this.getEmployeeId());
+            ResultSet results = stmt.executeQuery();
+            return new Employee(results);
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
 
     public static List<Employee> all() {
@@ -147,8 +155,9 @@ public class Employee extends Model {
     public static List<Employee> all(int page, int count) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM employees LIMIT ?")) {
+                     "SELECT * FROM employees LIMIT ? OFFSET ?")) {
             stmt.setInt(1, count);
+            stmt.setInt(2, (page - 1) * 10);
             ResultSet results = stmt.executeQuery();
             List<Employee> resultList = new LinkedList<>();
             while (results.next()) {

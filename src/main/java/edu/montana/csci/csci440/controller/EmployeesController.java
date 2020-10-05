@@ -32,7 +32,7 @@ public class EmployeesController {
 
         /* READ */
         get("/employees", (req, resp) -> {
-            List<Employee> employees = Employee.all(1, Web.PAGE_SIZE);
+            List<Employee> employees = Employee.all(Web.getPage(), Web.PAGE_SIZE);
             return Web.renderTemplate("templates/employees/index.vm",
                     "employees", employees);
         });

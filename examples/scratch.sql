@@ -24,7 +24,20 @@ FROM playlists
 JOIN playlist_track ON playlists.PlaylistId = playlist_track.PlaylistId
 WHERE playlists.PlaylistId=3;
 
-SELECT *
-FROM tracks
-ORDER BY Milliseconds
-LIMIT 10 OFFSET 0;
+SELECT bosses.FirstName AS BossName, employees.FirstName AS Name
+FROM employees
+JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId
+
+SELECT bosses.*
+FROM employees
+JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId
+WHERE employees.EmployeeId = 2;
+
+SELECT FirstName
+FROM employees
+WHERE employees.ReportsTo = 2;
+
+SELECT bosses.*
+FROM employees
+JOIN employees AS bosses ON employees.ReportsTo = bosses.ReportsTo
+WHERE employees.EmployeeId = 2;

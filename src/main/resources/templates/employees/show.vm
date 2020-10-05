@@ -16,12 +16,37 @@
     </tr>
     <tr>
         <td>LastName</td>
-        <td>$!employee.lastName</td>
+        <td>$!employee.LastName</td>
     </tr>
     <tr>
         <td>Email</td>
-        <td>$!employee.email</td>
+        <td>$!employee.Email</td>
     </tr>
+    <tr>
+        <td>Boss</td>
+        <td>$!employee.Boss.FirstName</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Reports</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+    </tr>
+    </thead>
+    <tbody>
+        #foreach( $report in $employee.Reports )
+        <tr>
+            <td><a href="/employees/$report.EmployeeId">$report.EmployeeId</a></td>
+            <td>$!report.FirstName</td>
+            <td>$!report.LastName</td>
+        </tr>
+        #end
     </tbody>
 </table>
 
