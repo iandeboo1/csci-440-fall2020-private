@@ -59,6 +59,6 @@
     </tbody>
 </table>
 
-
+$web.pagingWidget($invoice.InvoiceItems)
 
 #parse('templates/footer.vm')
