@@ -10,10 +10,11 @@ import java.util.List;
 
 public class Employee extends Model {
 
-    private long employeeId;
+    private Long employeeId;
     private String firstName;
     private String lastName;
     private String email;
+    private String title;
 
     public Employee() {
         // new employee for insert
@@ -24,10 +25,11 @@ public class Employee extends Model {
         lastName = results.getString("LastName");
         email = results.getString("Email");
         employeeId = results.getLong("EmployeeId");
+        title = results.getString("Title");
     }
 
     public static List<Employee.SalesSummary> getSalesSummaries() {
-        //TODO - a GROUP BY query to determine the sales, using the SalesSummary class
+        //TODO - a GROUP BY query to determine the sales (look at the invoices table), using the SalesSummary class
         return Collections.emptyList();
     }
 
@@ -113,7 +115,7 @@ public class Employee extends Model {
         this.email = email;
     }
 
-    public long getEmployeeId() {
+    public Long getEmployeeId() {
         return employeeId;
     }
 
@@ -124,7 +126,8 @@ public class Employee extends Model {
     public List<Employee> getReports() {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM employees  WHERE employees.ReportsTo=?")) {
+                     "SELECT * FROM employees WHERE ReportsTo=?"
+             )) {
             stmt.setLong(1, this.getEmployeeId());
             ResultSet results = stmt.executeQuery();
             List<Employee> resultList = new LinkedList<>();
@@ -137,15 +140,8 @@ public class Employee extends Model {
         }
     }
     public Employee getBoss() {
-        try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT bosses.* FROM employees JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId WHERE employees.EmployeeId=?")) {
-            stmt.setLong(1, this.getEmployeeId());
-            ResultSet results = stmt.executeQuery();
-            return new Employee(results);
-        } catch (SQLException sqlException) {
-            throw new RuntimeException(sqlException);
-        }
+        //TODO implement
+        return null;
     }
 
     public static List<Employee> all() {
@@ -155,9 +151,9 @@ public class Employee extends Model {
     public static List<Employee> all(int page, int count) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM employees LIMIT ? OFFSET ?")) {
+                     "SELECT * FROM employees LIMIT ?"
+             )) {
             stmt.setInt(1, count);
-            stmt.setInt(2, (page - 1) * 10);
             ResultSet results = stmt.executeQuery();
             List<Employee> resultList = new LinkedList<>();
             while (results.next()) {
@@ -188,12 +184,20 @@ public class Employee extends Model {
         }
     }
 
+    public void setTitle(String programmer) {
+        title = programmer;
+    }
+
+    public void setReportsTo(Employee employee) {
+        // TODO implement
+    }
+
     public static class SalesSummary {
-        String firstName;
-        String lastName;
-        String email;
-        Long salesCount;
-        BigDecimal salesTotals;
+        private String firstName;
+        private String lastName;
+        private String email;
+        private Long salesCount;
+        private BigDecimal salesTotals;
         private SalesSummary(ResultSet results) throws SQLException {
             firstName = results.getString("FirstName");
             lastName = results.getString("LastName");

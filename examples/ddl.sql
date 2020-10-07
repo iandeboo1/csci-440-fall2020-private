@@ -47,3 +47,21 @@ WHERE ArtistName = "AC/DC";
 
 DROP VIEW tracksPlus;
 
+CREATE TABLE grammy_categories (
+    Name TEXT,
+    GrammyCategoryId INTEGER,
+    PRIMARY KEY (GrammyCategoryId)
+)
+
+CREATE TABLE grammy_infos (
+    ArtistId INTEGER,
+    AlbumId  INTEGER,
+    TrackId  INTEGER,
+    Status   TEXT,
+    GrammyCategoryId INTEGER,
+    FOREIGN KEY (GrammyCategoryId)
+            REFERENCES grammy_categories
+)
+
+INSERT INTO genres (Name)
+VALUES ("R&B"), ("Techno"), ("K-Pop"), ("Grunge"), ("Pop");

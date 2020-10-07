@@ -13,11 +13,11 @@ import java.util.List;
 
 public class InvoiceItem extends Model {
 
-    long invoiceLineId;
-    long invoiceId;
-    long trackId;
+    Long invoiceLineId;
+    Long invoiceId;
+    Long trackId;
     BigDecimal unitPrice;
-    long quantity;
+    Long quantity;
 
     private InvoiceItem(ResultSet results) throws SQLException {
         invoiceLineId = results.getLong("InvoiceLineId");
@@ -34,27 +34,27 @@ public class InvoiceItem extends Model {
         return null;
     }
 
-    public long getInvoiceLineId() {
+    public Long getInvoiceLineId() {
         return invoiceLineId;
     }
 
-    public void setInvoiceLineId(long invoiceLineId) {
+    public void setInvoiceLineId(Long invoiceLineId) {
         this.invoiceLineId = invoiceLineId;
     }
 
-    public long getInvoiceId() {
+    public Long getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(long invoiceId) {
+    public void setInvoiceId(Long invoiceId) {
         this.invoiceId = invoiceId;
     }
 
-    public long getTrackId() {
+    public Long getTrackId() {
         return trackId;
     }
 
-    public void setTrackId(long trackId) {
+    public void setTrackId(Long trackId) {
         this.trackId = trackId;
     }
 
@@ -66,11 +66,11 @@ public class InvoiceItem extends Model {
         this.unitPrice = unitPrice;
     }
 
-    public long getQuantity() {
+    public Long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(long quantity) {
+    public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
 
