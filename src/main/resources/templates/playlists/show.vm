@@ -30,7 +30,7 @@
     </tr>
     </thead>
     <tbody>
-        #foreach( $track in $playlist.tracks )
+        #foreach( $track in $playlist.Tracks )
         <tr>
             <td><a href="/tracks/$track.TrackId">$track.TrackId</a></td>
             <td>$!track.Name</td>
@@ -42,10 +42,6 @@
     </tbody>
 </table>
 
-$web.pagingWidget($playlist.tracks)
-
-<a href="/playlists/$playlist.PlaylistId/edit">[Edit Playlist]</a>
-<a href="/playlists/$playlist.PlaylistId/delete">[Delete Playlist]</a>
-
+$web.pagingWidget($playlist.Tracks)
 
 #parse('templates/footer.vm')

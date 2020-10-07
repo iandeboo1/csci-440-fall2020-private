@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Playlist extends Model {
 
-    Long playlistId;
+    long playlistId;
     String name;
 
     public Playlist() {
@@ -23,15 +23,15 @@ public class Playlist extends Model {
         playlistId = results.getLong("PlaylistId");
     }
 
-
     public List<Track> getTracks(){
-        // TODO implement, order by track name
-        return Collections.emptyList();
+        return Track.getForPlaylist(playlistId);
     }
 
     public Long getPlaylistId() {
         return playlistId;
     }
+
+    public void setPlaylistId(long playlistId) { this.playlistId = playlistId; }
 
     public String getName() {
         return name;
@@ -48,9 +48,10 @@ public class Playlist extends Model {
     public static List<Playlist> all(int page, int count) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM playlists LIMIT ?"
+                     "SELECT * FROM playlists LIMIT ? OFFSET ?"
              )) {
             stmt.setInt(1, count);
+            stmt.setInt(2, (page - 1) * 10);
             ResultSet results = stmt.executeQuery();
             List<Playlist> resultList = new LinkedList<>();
             while (results.next()) {

@@ -20,7 +20,6 @@ public class ArtistController {
         post("/artists/new", (req, resp) -> {
             Artist artist = new Artist();
             Web.putValuesInto(artist, "Name");
-            //TODO: FIGURE OUT WHY NAME ISN'T GETTING SET PROPERLY WITH PUTVALUESINTO METHOD
             if (artist.create()) {
                 Web.message("Created An Artist!");
                 return Web.redirect("/artists/" + artist.getArtistId());

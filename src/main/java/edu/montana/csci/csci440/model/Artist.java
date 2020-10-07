@@ -40,7 +40,7 @@ public class Artist extends Model {
         if (verify()) {
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(
-                         "UPDATE artist SET Name=? WHERE ArtistID=?")) {
+                         "UPDATE artists SET Name=? WHERE ArtistID=?")) {
                 stmt.setString(1, this.getName());
                 stmt.setLong(2, this.getArtistId());
                 stmt.executeUpdate();
