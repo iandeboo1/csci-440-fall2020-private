@@ -15,6 +15,7 @@ public class Employee extends Model {
     private String lastName;
     private String email;
     private String title;
+    private Long reportsTo;
 
     public Employee() {
         // new employee for insert
@@ -29,8 +30,23 @@ public class Employee extends Model {
     }
 
     public static List<Employee.SalesSummary> getSalesSummaries() {
-        //TODO - a GROUP BY query to determine the sales (look at the invoices table), using the SalesSummary class
-        return Collections.emptyList();
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT COUNT(*) as SalesCount, employees.FirstName AS FirstName, employees.LastName AS LastName, employees.Email as Email, SUM(Total) AS SalesTotal\n" +
+                             "FROM invoices\n" +
+                             "JOIN customers ON invoices.CustomerId = customers.CustomerId\n" +
+                             "JOIN employees ON customers.SupportRepId = employees.EmployeeId\n" +
+                             "GROUP BY employees.EmployeeId\n" +
+                             "ORDER BY SalesCount DESC;")) {
+            ResultSet results = stmt.executeQuery();
+            List<Employee.SalesSummary> resultList = new LinkedList<>();
+            while (results.next()) {
+                resultList.add(new Employee.SalesSummary(results));
+            }
+            return resultList;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
 
     @Override
@@ -112,12 +128,11 @@ public class Employee extends Model {
         return email;
     }
     public void setEmail(String email) {
+        System.out.println("Got here!");
         this.email = email;
     }
 
-    public Long getEmployeeId() {
-        return employeeId;
-    }
+    public Long getEmployeeId() { return employeeId; }
 
     public List<Customer> getCustomers() {
         return Customer.forEmployee(employeeId);
@@ -140,13 +155,16 @@ public class Employee extends Model {
     }
 
     public Employee getBoss() {
-        //TODO: FIGURE THIS OUT
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT bosses.* FROM employees JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId WHERE employees.EmployeeId=?")) {
             stmt.setLong(1, this.getEmployeeId());
             ResultSet results = stmt.executeQuery();
-            return new Employee(results);
+            if (results.next()) {
+                return new Employee(results);
+            } else {
+                return null;
+            }
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException);
         }
@@ -161,7 +179,7 @@ public class Employee extends Model {
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT * FROM employees LIMIT ? OFFSET ?")) {
             stmt.setInt(1, count);
-            stmt.setInt(2, (page - 1) * 10);
+            stmt.setInt(2, (page - 1) * count);
             ResultSet results = stmt.executeQuery();
             List<Employee> resultList = new LinkedList<>();
             while (results.next()) {
@@ -197,7 +215,7 @@ public class Employee extends Model {
     }
 
     public void setReportsTo(Employee employee) {
-        // TODO implement
+        this.reportsTo = employee.getEmployeeId();
     }
 
     public static class SalesSummary {

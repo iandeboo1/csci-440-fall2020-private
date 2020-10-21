@@ -38,7 +38,7 @@
     </tr>
     </thead>
     <tbody>
-        #foreach( $invoice in $customer.invoices )
+        #foreach( $invoice in $customer.Invoices )
         <tr>
             <td><a href="/invoices/$invoice.InvoiceId">$invoice.InvoiceId</a></td>
         </tr>
@@ -46,6 +46,6 @@
     </tbody>
 </table>
 
-$web.pagingWidget($customer.invoices)
+$web.pagingWidget($customer.Invoices)
 
 #parse('templates/footer.vm')

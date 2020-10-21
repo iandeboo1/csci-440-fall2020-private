@@ -102,7 +102,7 @@ public class Invoice extends Model {
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT * FROM invoices LIMIT ? OFFSET ?")) {
             stmt.setInt(1, count);
-            stmt.setInt(2, (page - 1) * 10);
+            stmt.setInt(2, (page - 1) * count);
             ResultSet results = stmt.executeQuery();
             List<Invoice> resultList = new LinkedList<>();
             while (results.next()) {
@@ -136,7 +136,7 @@ public class Invoice extends Model {
                      "SELECT * FROM invoices WHERE CustomerId=? LIMIT ? OFFSET ?")) {
             stmt.setLong(1, customerId);
             stmt.setInt(2, Web.PAGE_SIZE);
-            stmt.setInt(3, (Web.getPage() - 1) * 10);
+            stmt.setInt(3, (Web.getPage() - 1) * Web.PAGE_SIZE);
             ResultSet results = stmt.executeQuery();
             List<Invoice> resultList = new LinkedList<>();
             while (results.next()) {

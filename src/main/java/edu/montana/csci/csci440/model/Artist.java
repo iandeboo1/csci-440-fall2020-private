@@ -93,6 +93,8 @@ public class Artist extends Model {
     public void setArtist(Artist artist) {
         this.artistId = artist.getArtistId();
     }
+    //TODO: CHANGED TO ACCOMODATE A TEST, BUT NOT SURE IT'S RIGHT
+
 
     public String getName() {
         return name;
@@ -112,7 +114,7 @@ public class Artist extends Model {
                      "SELECT * FROM artists ORDER BY ArtistID LIMIT ? OFFSET ?"
              )) {
             stmt.setInt(1, count);
-            stmt.setInt(2, (page - 1) * 10);
+            stmt.setInt(2, (page - 1) * count);
             ResultSet results = stmt.executeQuery();
             List<Artist> resultList = new LinkedList<>();
             while (results.next()) {

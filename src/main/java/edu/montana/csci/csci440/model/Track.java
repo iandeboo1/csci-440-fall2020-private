@@ -47,6 +47,15 @@ public class Track extends Model {
         if (name == null || "".equals(name)) {
             addError("Name can't be null or blank!");
         }
+        if (milliseconds == null) {
+            addError("Milliseconds can't be null or blank!");
+        }
+        if (bytes == null) {
+            addError("Bytes can't be null or blank!");
+        }
+        if (unitPrice == null) {
+            addError("Unit Price can't be null or blank!");
+        }
         return !hasErrors();
         //TODO: DON'T KNOW HOW TO VERIFY REST OF VALUES
     }
@@ -309,7 +318,7 @@ public class Track extends Model {
             stmt.setString(2, search);
             stmt.setString(3, search);
             stmt.setInt(4, count);
-            stmt.setInt(5, (page - 1) * 10);
+            stmt.setInt(5, (page - 1) * count);
             ResultSet results = stmt.executeQuery();
             List<Track> resultList = new LinkedList<>();
             while (results.next()) {
@@ -353,7 +362,7 @@ public class Track extends Model {
             //TODO: ORDER BY DOESN'T SEEM TO BE WORKING EVEN THOUGH URL UPDATES
             stmt.setString(1, orderBy);
             stmt.setInt(2, count);
-            stmt.setInt(3, (page - 1) * 10);
+            stmt.setInt(3, (page - 1) * count);
             ResultSet results = stmt.executeQuery();
             List<Track> resultList = new LinkedList<>();
             while (results.next()) {
@@ -371,10 +380,9 @@ public class Track extends Model {
                      "SELECT * FROM tracks JOIN playlist_track ON tracks.TrackId = playlist_track.TrackID JOIN " +
                              "playlists ON playlist_track.PlaylistId = playlists.PlaylistId " +
                              "WHERE playlists.PlaylistId=? LIMIT ? OFFSET ?")) {
-            //TODO: THIS SQL QUERY ISN'T RETURNING ANYTHING HERE, BUT WORKS IN SCRATCH.SQL SO WTF
             stmt.setLong(1, playlistId);
             stmt.setInt(2, Web.PAGE_SIZE);
-            stmt.setInt(3, (Web.getPage() - 1) * 10);
+            stmt.setInt(3, (Web.getPage() - 1) * Web.PAGE_SIZE);
             ResultSet results = stmt.executeQuery();
             List<Track> resultList = new LinkedList<>();
             while (results.next()) {

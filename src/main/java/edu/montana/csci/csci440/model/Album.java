@@ -13,8 +13,8 @@ import java.util.List;
 
 public class Album extends Model {
 
-    long albumId;
-    long artistId;
+    Long albumId;
+    Long artistId;
     String title;
 
     public Album() {
@@ -27,12 +27,13 @@ public class Album extends Model {
         artistId = results.getLong("ArtistId");
     }
 
-    //TODO: FIGURE OUT WHAT ARTIST.VALIDATE IS AND HOW TO IMPLEMENT IT
-
     @Override
     public boolean verify() {
         if (title == null || "".equals(title)) {
             addError("Title can't be null or blank!");
+        }
+        if (artistId == null || artistId == 0) {
+            addError("Artist can't be null or blank!");
         }
         return !hasErrors();
     }
@@ -45,7 +46,8 @@ public class Album extends Model {
                          "UPDATE albums SET Title=?, ArtistId=? WHERE AlbumID=?")) {
                 stmt.setString(1, this.getTitle());
                 //TODO: ONLY CHANGES THE TITLE, WON'T SAVE CHANGES TO ARTIST
-                stmt.setLong(2, this.getArtistId());
+                System.out.println(this.getAlbumId());
+                stmt.setLong(2, this.getAlbumId());
                 stmt.setLong(3, this.getAlbumId());
                 stmt.executeUpdate();
                 return true;
@@ -60,9 +62,6 @@ public class Album extends Model {
     @Override
     public boolean create() {
         if (verify()) {
-            System.out.println("\n" + albumId);
-            System.out.println("\n" + artistId);
-            System.out.println("\n" + title);
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(
                          "INSERT INTO albums (Title, ArtistId) VALUES (?, ?)")) {
@@ -95,7 +94,7 @@ public class Album extends Model {
         return Artist.find(artistId);
     }
 
-    public void setArtist(long artistId) { this.artistId = artistId; }
+    public void setArtist(Artist artist) { this.artistId = artist.artistId; }
 
     public List<Track> getTracks() {
         return Track.forAlbum(albumId);
@@ -134,7 +133,7 @@ public class Album extends Model {
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT * FROM albums ORDER BY AlbumID LIMIT ? OFFSET ?")) {
             stmt.setInt(1, count);
-            stmt.setInt(2, (page - 1) * 10);
+            stmt.setInt(2, (page - 1) * count);
             ResultSet results = stmt.executeQuery();
             List<Album> resultList = new LinkedList<>();
             while (results.next()) {

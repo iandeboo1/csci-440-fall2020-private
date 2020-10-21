@@ -1,5 +1,6 @@
 package edu.montana.csci.csci440.util;
 
+import edu.montana.csci.csci440.model.Employee;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -255,9 +256,7 @@ public class Web {
         return select;
     }
 
-    public String param(String name) {
-        return getRequest().queryParams(name);
-    }
+    public String param(String name) { return getRequest().queryParams(name); }
 
     public static void init() {
         before((request, response) -> {
