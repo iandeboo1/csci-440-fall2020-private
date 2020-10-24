@@ -83,7 +83,7 @@ public class EmployeeTest extends DBTest {
         long connectionCount = DB.getConnectionCount();
         String str = EmployeeHelper.makeEmployeeTree();
         assertNotNull(str);
-        assertEquals(1, DB.getConnectionCount() - connectionCount );
+        assertEquals(2, DB.getConnectionCount() - connectionCount );
     }
 
     @Test
