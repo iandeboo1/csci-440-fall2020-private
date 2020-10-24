@@ -13,6 +13,8 @@ import java.util.List;
 
 public class Album extends Model {
 
+    //TODO: TEST 3 AND 4 FAIL
+
     Long albumId;
     Long artistId;
     String title;

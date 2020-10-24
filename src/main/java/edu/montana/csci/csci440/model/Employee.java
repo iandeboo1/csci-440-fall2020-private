@@ -10,6 +10,8 @@ import java.util.List;
 
 public class Employee extends Model {
 
+    //TODO: TESTS 3, 4, 5, AND 6 FAIL
+
     private Long employeeId;
     private String firstName;
     private String lastName;
@@ -127,10 +129,7 @@ public class Employee extends Model {
     public String getEmail() {
         return email;
     }
-    public void setEmail(String email) {
-        System.out.println("Got here!");
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
     public Long getEmployeeId() { return employeeId; }
 

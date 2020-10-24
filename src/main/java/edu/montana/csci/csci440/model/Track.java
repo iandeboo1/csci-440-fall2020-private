@@ -356,13 +356,25 @@ public class Track extends Model {
     }
 
     public static List<Track> all(int page, int count, String orderBy) {
+
+        LinkedList<Object> args = new LinkedList<>();
+
+        String query = "SELECT * FROM tracks LIMIT ? OFFSET ?";
+
+        if (orderBy != null) {
+            if (orderBy.equals("Milliseconds")) {
+                query = "SELECT * FROM tracks ORDER BY Milliseconds LIMIT ? OFFSET ?";
+            } else if (orderBy.equals("Bytes")) {
+                query = "SELECT * FROM tracks ORDER BY Bytes LIMIT ? OFFSET ?";
+            }
+        }
+        args.add(count);
+        args.add((page - 1) * 10);
+
         try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM tracks ORDER BY ? LIMIT ? OFFSET ?")) {
-            //TODO: ORDER BY DOESN'T SEEM TO BE WORKING EVEN THOUGH URL UPDATES
-            stmt.setString(1, orderBy);
-            stmt.setInt(2, count);
-            stmt.setInt(3, (page - 1) * count);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setObject(1, args.get(0));
+            stmt.setObject(2, args.get(1));
             ResultSet results = stmt.executeQuery();
             List<Track> resultList = new LinkedList<>();
             while (results.next()) {
