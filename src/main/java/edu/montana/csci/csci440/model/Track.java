@@ -24,6 +24,8 @@ public class Track extends Model {
     private Long milliseconds;
     private Long bytes;
     private BigDecimal unitPrice;
+    private String album;
+    private String artist;
 
     public Track() {
         // new track for insert
@@ -38,9 +40,9 @@ public class Track extends Model {
         albumId = results.getLong("AlbumId");
         mediaTypeId = results.getLong("MediaTypeId");
         genreId = results.getLong("GenreId");
+        album = results.getString("Title");
+        artist = results.getString("ArtistName");
     }
-
-    //TODO: FIGURE OUT WHAT TRACKS.VALIDATE IS AND HOW TO IMPLEMENT IT
 
     @Override
     public boolean verify() {
@@ -123,7 +125,9 @@ public class Track extends Model {
     public static Track find(int i) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM tracks WHERE TrackId=?")) {
+                     "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums " +
+                             "ON tracks.AlbumId = albums.AlbumId JOIN artists ON albums.ArtistId = " +
+                             "artists.ArtistId WHERE TrackId=?")) {
             stmt.setLong(1, i);
             ResultSet results = stmt.executeQuery();
             if (results.next()) {
@@ -238,15 +242,11 @@ public class Track extends Model {
     }
 
     public String getArtistName() {
-        // TODO implement more efficiently
-        //  hint: cache on this model object
-        return getAlbum().getArtist().getName();
+        return artist;
     }
 
     public String getAlbumTitle() {
-        // TODO implement more efficiently
-        //  hint: cache on this model object
-        return getAlbum().getTitle();
+        return album;
     }
 
     public static List<Track> advancedSearch(int page, int count,
@@ -255,9 +255,9 @@ public class Track extends Model {
                                              Integer maxRuntime, Integer minRuntime) {
         LinkedList<Object> args = new LinkedList<>();
 
-        String query = "SELECT * FROM tracks " +
-                "JOIN albums ON tracks.AlbumId = albums.AlbumId " +
-                "WHERE name LIKE ?";
+        String query = "SELECT *, artists.Name AS ArtistName FROM tracks " +
+                "JOIN albums ON tracks.AlbumId = albums.AlbumId JOIN artists ON albums.ArtistId = " +
+                "artists.ArtistId WHERE tracks.Name LIKE ?";
         args.add("%" + search + "%");
 
         // Conditionally include the query and argument
@@ -308,9 +308,9 @@ public class Track extends Model {
     }
 
     public static List<Track> search(int page, int count, String orderBy, String search) {
-        String query = "SELECT * FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
-                "JOIN artists ON albums.ArtistId = artists.ArtistId WHERE (tracks.Name LIKE ? OR " +
-                "albums.Title LIKE ? OR artists.Name LIKE ?) LIMIT ? OFFSET ?";
+        String query = "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON " +
+                "tracks.AlbumId = albums.AlbumId JOIN artists ON albums.ArtistId = artists.ArtistId WHERE " +
+                "(tracks.Name LIKE ? OR albums.Title LIKE ? OR artists.Name LIKE ?) LIMIT ? OFFSET ?";
         search = "%" + search + "%";
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -331,7 +331,8 @@ public class Track extends Model {
     }
 
     public static List<Track> forAlbum(long albumId) {
-        String query = "SELECT * FROM tracks WHERE AlbumId=?";
+        String query = "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
+                "JOIN artists ON albums.ArtistId = artists.ArtistId WHERE tracks.AlbumId=?";
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setLong(1, albumId);
@@ -359,13 +360,17 @@ public class Track extends Model {
 
         LinkedList<Object> args = new LinkedList<>();
 
-        String query = "SELECT * FROM tracks LIMIT ? OFFSET ?";
+        String query = "SELECT *, artists.Name AS ArtistName FROM tracks " +
+                "JOIN albums ON tracks.AlbumId = albums.AlbumId JOIN artists ON albums.ArtistId = " +
+                "artists.ArtistId LIMIT ? OFFSET ?";
 
         if (orderBy != null) {
             if (orderBy.equals("Milliseconds")) {
-                query = "SELECT * FROM tracks ORDER BY Milliseconds LIMIT ? OFFSET ?";
+                query = "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
+                        "JOIN artists ON albums.ArtistId = artists.ArtistId ORDER BY Milliseconds LIMIT ? OFFSET ?";
             } else if (orderBy.equals("Bytes")) {
-                query = "SELECT * FROM tracks ORDER BY Bytes LIMIT ? OFFSET ?";
+                query = "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
+                        "JOIN artists ON albums.ArtistId = artists.ArtistId ORDER BY Bytes LIMIT ? OFFSET ?";
             }
         }
         args.add(count);
@@ -389,8 +394,9 @@ public class Track extends Model {
     public static List<Track> getForPlaylist(long playlistId) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT * FROM tracks JOIN playlist_track ON tracks.TrackId = playlist_track.TrackID JOIN " +
-                             "playlists ON playlist_track.PlaylistId = playlists.PlaylistId " +
+                     "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
+                             "JOIN artists ON albums.ArtistId = artists.ArtistId JOIN playlist_track ON tracks.TrackId = " +
+                             "playlist_track.TrackID JOIN playlists ON playlist_track.PlaylistId = playlists.PlaylistId " +
                              "WHERE playlists.PlaylistId=? LIMIT ? OFFSET ?")) {
             stmt.setLong(1, playlistId);
             stmt.setInt(2, Web.PAGE_SIZE);

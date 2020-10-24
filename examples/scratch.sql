@@ -93,3 +93,23 @@ FROM invoices
 JOIN customers ON invoices.CustomerId = customers.CustomerId
 GROUP BY invoices.CustomerId
 HAVING InvoiceCount > 3;
+
+SELECT COUNT(*)
+FROM invoices
+JOIN customers ON invoices.CustomerId = customers.CustomerId
+GROUP BY invoices.CustomerId;
+
+/*Use the insert 4 times and then check with the select statement to test paging on customer detailed view*/
+
+INSERT INTO invoices
+(CustomerId, InvoiceDate, Total)
+VALUES (2, 3, 4);
+
+SELECT *
+FROM invoices
+WHERE CustomerId = 2;
+
+/*Use the insert 4 times and then check with the select statement to test paging on customer detailed view*/
+
+SELECT *
+FROM employees;

@@ -29,6 +29,7 @@ public class Employee extends Model {
         email = results.getString("Email");
         employeeId = results.getLong("EmployeeId");
         title = results.getString("Title");
+        reportsTo = results.getLong("ReportsTo");
     }
 
     public static List<Employee.SalesSummary> getSalesSummaries() {
@@ -215,6 +216,10 @@ public class Employee extends Model {
 
     public void setReportsTo(Employee employee) {
         this.reportsTo = employee.getEmployeeId();
+    }
+
+    public long getReportTo() {
+        return reportsTo;
     }
 
     public static class SalesSummary {
