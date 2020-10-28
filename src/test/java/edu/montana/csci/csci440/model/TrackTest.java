@@ -33,7 +33,9 @@ public class TrackTest extends DBTest {
         track.setAlbum(Album.find(1));
 
         assertNull(track.getTrackId());
+        System.out.println(track.getTrackId());
         track.create();
+        System.out.println(track.getTrackId());
         assertNotNull(track.getTrackId());
 
         assertEquals(Album.find(1), track.getAlbum());

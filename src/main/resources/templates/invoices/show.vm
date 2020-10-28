@@ -62,9 +62,11 @@
             <td>$!item.ArtistName</td>
         </tr>
         #end
+        $web.pagingWidget($invoice.InvoiceItems)
     </tbody>
 </table>
 
 $web.pagingWidget($invoice.InvoiceItems)
 
 #parse('templates/footer.vm')
+

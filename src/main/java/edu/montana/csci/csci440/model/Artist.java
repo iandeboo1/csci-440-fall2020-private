@@ -27,8 +27,6 @@ public class Artist extends Model {
         artistId = results.getLong("ArtistId");
     }
 
-    //TODO: FIGURE OUT WHAT ARTIST.VALIDATE IS AND HOW TO IMPLEMENT IT
-
     @Override
     public boolean verify() {
         if (name == null || "".equals(name)) {
@@ -96,7 +94,6 @@ public class Artist extends Model {
         this.artistId = artist.getArtistId();
     }
     //TODO: CHANGED TO ACCOMODATE A TEST, BUT NOT SURE IT'S RIGHT
-
 
     public String getName() {
         return name;

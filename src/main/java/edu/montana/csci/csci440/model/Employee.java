@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Employee extends Model {
 
-    //TODO: TESTS 3, 4, 5, AND 6 FAIL
+    //TODO: TESTS 3, 4, 5, 6, and 7 FAIL
 
     private Long employeeId;
     private Long reportsTo;
@@ -18,7 +18,6 @@ public class Employee extends Model {
     private String lastName;
     private String email;
     private String title;
-    private Long reportsTo;
 
     public Employee() {
         // new employee for insert
@@ -61,6 +60,9 @@ public class Employee extends Model {
         }
         if (lastName == null || "".equals(lastName)) {
             addError("LastName can't be null!");
+        }
+        if (email == null || "".equals(email)) {
+            addError("Email can't be null!");
         }
         return !hasErrors();
     }
@@ -144,9 +146,9 @@ public class Employee extends Model {
         return reportsTo;
     }
 
-    public void setReportsTo(Long reportsTo) {
-        this.reportsTo = reportsTo;
-    }
+//    public void setReportsTo(Long reportsTo) {
+//        this.reportsTo = reportsTo;
+//    }
 
     public List<Employee> getReports() {
         try (Connection conn = DB.connect();

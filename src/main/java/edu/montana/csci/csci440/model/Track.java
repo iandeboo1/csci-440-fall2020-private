@@ -16,6 +16,8 @@ import java.util.List;
 
 public class Track extends Model {
 
+    //TODO: TESTS 2, 3, 4, AND 9 FAIL
+
     private Long trackId;
     private Long albumId;
     private Long mediaTypeId;
@@ -58,8 +60,16 @@ public class Track extends Model {
         if (unitPrice == null) {
             addError("Unit Price can't be null or blank!");
         }
+        if (albumId == null) {
+            addError("Album can't be null!");
+        }
+        if (mediaTypeId == null) {
+            addError("Album can't be null!");
+        }
+        if (genreId == null) {
+            addError("Album can't be null!");
+        }
         return !hasErrors();
-        //TODO: DON'T KNOW HOW TO VERIFY REST OF VALUES
     }
 
     @Override
@@ -189,9 +199,7 @@ public class Track extends Model {
         this.name = name;
     }
 
-    public Long getMilliseconds() {
-        return milliseconds;
-    }
+    public Long getMilliseconds() { return milliseconds; }
 
     public void setMilliseconds(Long milliseconds) {
         this.milliseconds = milliseconds;

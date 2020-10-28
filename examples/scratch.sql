@@ -111,5 +111,3 @@ WHERE CustomerId = 2;
 
 /*Use the insert 4 times and then check with the select statement to test paging on customer detailed view*/
 
-SELECT *
-FROM employees;
