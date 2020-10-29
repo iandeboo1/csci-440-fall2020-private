@@ -111,3 +111,22 @@ WHERE CustomerId = 2;
 
 /*Use the insert 4 times and then check with the select statement to test paging on customer detailed view*/
 
+SELECT customers.Email
+FROM customers
+JOIN employees ON customers.SupportRepId = employees.EmployeeId
+WHERE employees.FirstName = 'Jane' AND customers.CustomerId IN (SELECT customers.CustomerId
+                                                                FROM customers
+                                                                JOIN invoices ON customers.CustomerId = invoices.CustomerId
+                                                                JOIN invoice_items ON invoices.InvoiceId = invoice_items.InvoiceId
+                                                                JOIN tracks ON invoice_items.TrackId = tracks.TrackId
+                                                                JOIN genres ON tracks.GenreId = genres.GenreId
+                                                                WHERE genres.Name = 'Rock');
+
+SELECT customers.CustomerId
+FROM customers
+JOIN invoices ON customers.CustomerId = invoices.CustomerId
+JOIN invoice_items ON invoices.InvoiceId = invoice_items.InvoiceId
+JOIN tracks ON invoice_items.TrackId = tracks.TrackId
+JOIN genres ON tracks.GenreId = genres.GenreId
+WHERE genres.Name = 'Rock';
+
