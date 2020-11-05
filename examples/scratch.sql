@@ -130,3 +130,5 @@ JOIN tracks ON invoice_items.TrackId = tracks.TrackId
 JOIN genres ON tracks.GenreId = genres.GenreId
 WHERE genres.Name = 'Rock';
 
+SELECT *
+FROM tracks;

@@ -29,6 +29,7 @@ public class Artist extends Model {
 
     @Override
     public boolean verify() {
+
         if (name == null || "".equals(name)) {
             addError("Name can't be null or blank!");
         }
@@ -93,7 +94,6 @@ public class Artist extends Model {
     public void setArtist(Artist artist) {
         this.artistId = artist.getArtistId();
     }
-    //TODO: CHANGED TO ACCOMODATE A TEST, BUT NOT SURE IT'S RIGHT
 
     public String getName() {
         return name;

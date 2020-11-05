@@ -11,12 +11,14 @@ public class ArtistTest extends DBTest {
 
     @Test
     void testAllLoadsAllArtists() {
+        //TODO: NUMBER OF ARTISTS IS 275, NOT SURE WHY 347 IS EXPECTED
         List<Artist> all = Artist.all();
         assertEquals(347, all.size());
     }
 
     @Test
     void testPagingWorks() {
+        //TODO: AGAIN, NUMBER OF ARTISTS IS 275, NOT SURE WHY 347 IS EXPECTED
         assertEquals(100, Artist.all(1, 100).size());
         assertEquals(100, Artist.all(2, 100).size());
         assertEquals(100, Artist.all(3, 100).size());
@@ -39,6 +41,7 @@ public class ArtistTest extends DBTest {
 
     @Test
     void testValidationWorks() {
+        //TODO: ERRORS SET TO 1 ON LINE 49 AND ERRORS STILL EXIST ON LINE 52 BECAUSE THEY AREN'T CLEARED, THERE'S ACTUALLY NO WAY TO CLEAR THEM
         Artist Artist = new Artist();
 
         assertFalse(Artist.verify());

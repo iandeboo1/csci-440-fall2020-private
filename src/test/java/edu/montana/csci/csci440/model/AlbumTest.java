@@ -29,8 +29,9 @@ public class AlbumTest extends DBTest {
         Album album = new Album();
 
         album.setTitle("Example");
-//        album.setArtist(Artist.find(1));
+        album.setArtist(Artist.find(1));
         //TODO: UNCOMMENT THIS
+        System.out.println(album.getAlbumId());
         assertNull(album.getAlbumId());
         album.create();
         assertNotNull(album.getAlbumId());
@@ -40,6 +41,7 @@ public class AlbumTest extends DBTest {
 
     @Test
     void testValidationWorks() {
+        //TODO: ERRORS SET TO 2 ON LINE 50 AND ERRORS STILL EXIST ON LINE 55 BECAUSE THEY AREN'T CLEARED, THERE'S ACTUALLY NO WAY TO CLEAR THEM
         Album album = new Album();
 
         assertFalse(album.verify());
@@ -47,7 +49,7 @@ public class AlbumTest extends DBTest {
         assertEquals(2, album.getErrors().size());
 
         album.setTitle("Example");
-//        album.setArtist(Artist.find(1));
+        album.setArtist(Artist.find(1));
         //TODO: UNCOMMENT THIS
         assertTrue(album.verify());
         assertEquals(0, album.getErrors().size());

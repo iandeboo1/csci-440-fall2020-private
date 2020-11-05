@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Track extends Model {
 
-    //TODO: TESTS 2, 3, 4, AND 9 FAIL
+    //TODO: TESTS 2, 4, AND 9 FAIL
 
     private Long trackId;
     private Long albumId;
@@ -30,7 +30,11 @@ public class Track extends Model {
     private String artist;
 
     public Track() {
-        // new track for insert
+        mediaTypeId = 1L;
+        genreId = 1L;
+        milliseconds = 1L;
+        bytes = 1L;
+        unitPrice = new BigDecimal(1);
     }
 
     private Track(ResultSet results) throws SQLException {
@@ -51,22 +55,7 @@ public class Track extends Model {
         if (name == null || "".equals(name)) {
             addError("Name can't be null or blank!");
         }
-        if (milliseconds == null) {
-            addError("Milliseconds can't be null or blank!");
-        }
-        if (bytes == null) {
-            addError("Bytes can't be null or blank!");
-        }
-        if (unitPrice == null) {
-            addError("Unit Price can't be null or blank!");
-        }
         if (albumId == null) {
-            addError("Album can't be null!");
-        }
-        if (mediaTypeId == null) {
-            addError("Album can't be null!");
-        }
-        if (genreId == null) {
             addError("Album can't be null!");
         }
         return !hasErrors();
@@ -382,7 +371,7 @@ public class Track extends Model {
             }
         }
         args.add(count);
-        args.add((page - 1) * 10);
+        args.add((page - 1) * count);
 
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(query)) {

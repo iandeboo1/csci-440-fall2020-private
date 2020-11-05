@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Album extends Model {
 
-    //TODO: TEST 3 AND 4 FAIL
+    //TODO: TEST 4 FAILS
 
     Long albumId;
     Long artistId;
@@ -102,7 +102,7 @@ public class Album extends Model {
         return Track.forAlbum(albumId);
     }
 
-    public long getAlbumId() {
+    public Long getAlbumId() {
         return albumId;
     }
 
@@ -118,7 +118,7 @@ public class Album extends Model {
         this.title = name;
     }
 
-    public long getArtistId() {
+    public Long getArtistId() {
         return artistId;
     }
 
