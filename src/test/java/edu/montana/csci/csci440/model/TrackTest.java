@@ -3,6 +3,7 @@ package edu.montana.csci.csci440.model;
 import edu.montana.csci.csci440.DBTest;
 import edu.montana.csci.csci440.util.DB;
 import org.junit.jupiter.api.Test;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -111,6 +112,7 @@ public class TrackTest extends DBTest {
 
     @Test
     void trackCountIsCachedInRedis(){
+        //TODO: THIS TEST WILL PASS ONCE, BUT THEN FAIL IF YOU RUN IT AGAIN BECAUSE REDIS CACHE WASHN'T FLUSHED AT BEGINNING OF TEST
 
         long initialCount = DB.getConnectionCount();
         Long count = Track.count();

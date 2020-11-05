@@ -1,6 +1,7 @@
 package edu.montana.csci.csci440.model;
 
 import edu.montana.csci.csci440.util.DB;
+import edu.montana.csci.csci440.util.Web;
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class Track extends Model {
 
-    //TODO: TESTS 2, 4, AND 9 FAIL
+    //TODO: TEST 5 FAILS
 
     private Long trackId;
     private Long albumId;
@@ -33,10 +34,10 @@ public class Track extends Model {
     public static final String REDIS_CACHE_KEY = "cs440-tracks-count-cache";
 
     public Track() {
-        mediaTypeId = 1l;
-        genreId = 1l;
-        milliseconds  = 0l;
-        bytes  = 0l;
+        mediaTypeId = 1L;
+        genreId = 1L;
+        milliseconds  = 0L;
+        bytes  = 0L;
         unitPrice = new BigDecimal("0");
     }
 
@@ -103,6 +104,12 @@ public class Track extends Model {
                 stmt.setLong(7, this.getGenreId());
                 stmt.executeUpdate();
                 trackId = DB.getLastID(conn);
+                try {
+                    Jedis redisClient = new Jedis(); // use this class to access redis and create a cache
+                    redisClient.flushAll();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 return true;
             } catch (SQLException sqlException) {
                 throw new RuntimeException(sqlException);
@@ -119,6 +126,12 @@ public class Track extends Model {
                      "DELETE FROM tracks WHERE TrackId=?")) {
             stmt.setLong(1, this.getTrackId());
             stmt.executeUpdate();
+            try {
+                Jedis redisClient = new Jedis(); // use this class to access redis and create a cache
+                redisClient.flushAll();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException);
         }
@@ -143,18 +156,29 @@ public class Track extends Model {
     }
 
     public static Long count() {
-        Jedis redisClient = new Jedis(); // use this class to access redis and create a cache
-        try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT COUNT(*) as Count FROM tracks")) {
-            ResultSet results = stmt.executeQuery();
-            if (results.next()) {
-                return results.getLong("Count");
+        try {
+            Jedis redisClient = new Jedis(); // use this class to access redis and create a cache
+            if (redisClient.exists("count")) {
+                // redis already has stored value for count
+                return Long.valueOf(redisClient.get("count"));
             } else {
-                throw new IllegalStateException("Should find a count!");
+                // redis does not already have stored value for count
+                try (Connection conn = DB.connect();
+                     PreparedStatement stmt = conn.prepareStatement(
+                             "SELECT COUNT(*) as Count FROM tracks")) {
+                    ResultSet results = stmt.executeQuery();
+                    if (results.next()) {
+                        redisClient.set("count", String.valueOf(results.getLong("Count")));
+                        return results.getLong("Count");
+                    } else {
+                        throw new IllegalStateException("Should find a count!");
+                    }
+                } catch (SQLException sqlException) {
+                    throw new RuntimeException(sqlException);
+                }
             }
-        } catch (SQLException sqlException) {
-            throw new RuntimeException(sqlException);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -171,10 +195,22 @@ public class Track extends Model {
     }
 
     public List<Playlist> getPlaylists(){
-        return Collections.emptyList();
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT * FROM playlists JOIN playlist_track ON playlists.PlaylistId = " +
+                             "playlist_track.PlaylistId JOIN tracks ON playlist_track.TrackId = " +
+                             "tracks.TrackId WHERE tracks.TrackId=?;")) {
+            stmt.setLong(1, getTrackId());
+            ResultSet results = stmt.executeQuery();
+            List<Playlist> resultList = new LinkedList<>();
+            while (results.next()) {
+                resultList.add(new Playlist());
+            }
+            return resultList;
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
-
-    public List<InvoiceItem> getInvoiceItems(){ return Collections.emptyList(); }
 
     public Long getTrackId() {
         return trackId;

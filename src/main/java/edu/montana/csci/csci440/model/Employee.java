@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Employee extends Model {
 
-    //TODO: TESTS 3, 4, 5, 6, and 7 FAIL
+    //TODO: TESTS 1, 2, 3, and 7 FAIL
 
     private Long employeeId;
     private Long reportsTo;
@@ -145,10 +145,6 @@ public class Employee extends Model {
     public Long getReportsTo() {
         return reportsTo;
     }
-
-//    public void setReportsTo(Long reportsTo) {
-//        this.reportsTo = reportsTo;
-//    }
 
     public List<Employee> getReports() {
         try (Connection conn = DB.connect();
