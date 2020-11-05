@@ -22,7 +22,7 @@ public class TrackTest extends DBTest {
         assertEquals(1000, Track.all(2, 1000).size());
         assertEquals(1000, Track.all(3, 1000).size());
         assertEquals(503, Track.all(4, 1000).size());
-        assertEquals(0, Track.all(5, 100).size());
+        assertEquals(0, Track.all(5, 1000).size());
     }
 
     @Test
@@ -33,12 +33,25 @@ public class TrackTest extends DBTest {
         track.setAlbum(Album.find(1));
 
         assertNull(track.getTrackId());
-        System.out.println(track.getTrackId());
         track.create();
-        System.out.println(track.getTrackId());
         assertNotNull(track.getTrackId());
 
         assertEquals(Album.find(1), track.getAlbum());
+    }
+
+    @Test
+    void testDeleteWorks() {
+        Track track = new Track();
+
+        track.setName("Example");
+        track.setAlbum(Album.find(1));
+
+        assertNull(track.getTrackId());
+        track.create();
+        assertNotNull(track.getTrackId());
+        track.delete();
+
+        assertNull(Track.find(track.getTrackId()));
     }
 
     @Test
@@ -94,6 +107,28 @@ public class TrackTest extends DBTest {
     void testTrackListsWorks() {
         Track track = Track.find(1);
         assertEquals(3, track.getPlaylists().size());
+    }
+
+    @Test
+    void trackCountIsCachedInRedis(){
+
+        long initialCount = DB.getConnectionCount();
+        Long count = Track.count();
+        assertEquals(initialCount + 1, DB.getConnectionCount());
+
+        // should be cached for second time
+        count = Track.count();
+        assertEquals(initialCount + 1, DB.getConnectionCount());
+
+        Track track = new Track();
+        track.setName("Example");
+        track.setAlbum(Album.find(1));
+        assertTrue(track.create());
+
+        // cache should have been invalidated
+        count = Track.count();
+        assertEquals(initialCount + 4, DB.getConnectionCount());
+
     }
 
 }

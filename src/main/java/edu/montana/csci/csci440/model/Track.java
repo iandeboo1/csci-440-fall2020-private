@@ -1,7 +1,8 @@
 package edu.montana.csci.csci440.model;
 
 import edu.montana.csci.csci440.util.DB;
-import edu.montana.csci.csci440.util.Web;
+import redis.clients.jedis.Client;
+import redis.clients.jedis.Jedis;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -29,12 +30,14 @@ public class Track extends Model {
     private String album;
     private String artist;
 
+    public static final String REDIS_CACHE_KEY = "cs440-tracks-count-cache";
+
     public Track() {
-        mediaTypeId = 1L;
-        genreId = 1L;
-        milliseconds = 1L;
-        bytes = 1L;
-        unitPrice = new BigDecimal(1);
+        mediaTypeId = 1l;
+        genreId = 1l;
+        milliseconds  = 0l;
+        bytes  = 0l;
+        unitPrice = new BigDecimal("0");
     }
 
     private Track(ResultSet results) throws SQLException {
@@ -121,7 +124,7 @@ public class Track extends Model {
         }
     }
 
-    public static Track find(int i) {
+    public static Track find(long i) {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums " +
@@ -139,7 +142,8 @@ public class Track extends Model {
         }
     }
 
-    public static long count() {
+    public static Long count() {
+        Jedis redisClient = new Jedis(); // use this class to access redis and create a cache
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
                      "SELECT COUNT(*) as Count FROM tracks")) {
@@ -188,7 +192,9 @@ public class Track extends Model {
         this.name = name;
     }
 
-    public Long getMilliseconds() { return milliseconds; }
+    public Long getMilliseconds() {
+        return milliseconds;
+    }
 
     public void setMilliseconds(Long milliseconds) {
         this.milliseconds = milliseconds;
@@ -403,7 +409,6 @@ public class Track extends Model {
             while (results.next()) {
                 resultList.add(new Track(results));
             }
-            System.out.println(resultList.size());
             return resultList;
         } catch (SQLException sqlException) {
             throw new RuntimeException(sqlException);
