@@ -129,11 +129,12 @@ JOIN tracks ON invoice_items.TrackId = tracks.TrackId
 JOIN genres ON tracks.GenreId = genres.GenreId
 WHERE genres.Name = 'Rock';
 
-SELECT *
-FROM employees;
-
-SELECT bosses.*
-FROM employees
-JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId
-WHERE employees.EmployeeId = 6;
+SELECT *, artists.Name AS ArtistName
+FROM tracks
+JOIN albums ON tracks.AlbumId = albums.AlbumId
+JOIN artists ON albums.ArtistId = artists.ArtistId
+JOIN playlist_track ON tracks.TrackId = playlist_track.TrackID
+JOIN playlists ON playlist_track.PlaylistId = playlists.PlaylistId
+WHERE playlists.PlaylistId = 3
+ORDER BY tracks.Name;
 

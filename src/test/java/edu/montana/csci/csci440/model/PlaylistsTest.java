@@ -17,7 +17,6 @@ public class PlaylistsTest extends DBTest {
 
     @Test
     void testPlaylistFieldsLoad() {
-        // TODO: PROBLEM IS GETTRACKS IS PAGED FOR DISPLAYED DETAILED PLAYLIST VIEW, BUT CALLING IT FROM HERE DOESN'T HAVE PAGE ASSOCIATION AND FAILS
         Playlist c = Playlist.find(3);
         assertEquals("TV Shows", c.getName());
         assertEquals(213, c.getTracks().size());

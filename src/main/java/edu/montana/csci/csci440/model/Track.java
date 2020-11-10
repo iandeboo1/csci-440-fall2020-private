@@ -430,15 +430,33 @@ public class Track extends Model {
     }
 
     public static List<Track> getForPlaylist(long playlistId) {
+
+        String query;
+        LinkedList<Object> args = new LinkedList<>();
+
+        try {
+            Web.getPage();
+            query = "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
+                    "JOIN artists ON albums.ArtistId = artists.ArtistId JOIN playlist_track ON tracks.TrackId = " +
+                    "playlist_track.TrackID JOIN playlists ON playlist_track.PlaylistId = playlists.PlaylistId " +
+                    "WHERE playlists.PlaylistId=? ORDER BY tracks.Name LIMIT ? OFFSET ?";
+            args.add(playlistId);
+            args.add(Web.PAGE_SIZE);
+            args.add((Web.getPage() - 1) * Web.PAGE_SIZE);
+        } catch (NullPointerException n) {
+            query = "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
+                    "JOIN artists ON albums.ArtistId = artists.ArtistId JOIN playlist_track ON tracks.TrackId = " +
+                    "playlist_track.TrackID JOIN playlists ON playlist_track.PlaylistId = playlists.PlaylistId " +
+                    "WHERE playlists.PlaylistId=? ORDER BY tracks.Name";
+            args.add(playlistId);
+        }
+
         try (Connection conn = DB.connect();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT *, artists.Name AS ArtistName FROM tracks JOIN albums ON tracks.AlbumId = albums.AlbumId " +
-                             "JOIN artists ON albums.ArtistId = artists.ArtistId JOIN playlist_track ON tracks.TrackId = " +
-                             "playlist_track.TrackID JOIN playlists ON playlist_track.PlaylistId = playlists.PlaylistId " +
-                             "WHERE playlists.PlaylistId=? LIMIT ? OFFSET ?")) {
-            stmt.setLong(1, playlistId);
-            stmt.setInt(2, Web.PAGE_SIZE);
-            stmt.setInt(3, (Web.getPage() - 1) * Web.PAGE_SIZE);
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            for (int i = 0; i < args.size(); i++) {
+                Object arg = args.get(i);
+                stmt.setObject(i + 1, arg);
+            }
             ResultSet results = stmt.executeQuery();
             List<Track> resultList = new LinkedList<>();
             while (results.next()) {
