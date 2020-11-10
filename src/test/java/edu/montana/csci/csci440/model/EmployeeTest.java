@@ -31,7 +31,6 @@ public class EmployeeTest extends DBTest {
 
     @Test
     void testCreateWorks() {
-        //TODO: SOME WEIRD MESSAGE ABOUT PRIVATE ACCESS FROM MODEL CLASS
         Employee emp = new Employee();
 
         emp.setLastName("Blow");

@@ -10,8 +10,6 @@ import java.util.List;
 
 public class Employee extends Model {
 
-    //TODO: TESTS 3 FAILS
-
     private Long employeeId;
     private Long reportsTo;
     private String firstName;
@@ -30,7 +28,6 @@ public class Employee extends Model {
         employeeId = results.getLong("EmployeeId");
         reportsTo = results.getLong("ReportsTo");
         title = results.getString("Title");
-        reportsTo = results.getLong("ReportsTo");
     }
 
     public static List<Employee.SalesSummary> getSalesSummaries() {
