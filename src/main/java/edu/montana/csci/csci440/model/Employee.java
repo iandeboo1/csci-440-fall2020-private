@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Employee extends Model {
 
-    //TODO: TESTS 1, 2, 3, and 7 FAIL
+    //TODO: TESTS 3 FAILS
 
     private Long employeeId;
     private Long reportsTo;
@@ -36,7 +36,7 @@ public class Employee extends Model {
     public static List<Employee.SalesSummary> getSalesSummaries() {
         try (Connection conn = DB.connect();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT COUNT(*) as SalesCount, employees.FirstName AS FirstName, employees.LastName AS LastName, employees.Email as Email, SUM(Total) AS SalesTotal\n" +
+                     "SELECT COUNT(*) as SalesCount, employees.FirstName AS FirstName, employees.LastName AS LastName, employees.Email as Email, ROUND(SUM(Total), 2) AS SalesTotal\n" +
                              "FROM invoices\n" +
                              "JOIN customers ON invoices.CustomerId = customers.CustomerId\n" +
                              "JOIN employees ON customers.SupportRepId = employees.EmployeeId\n" +
@@ -55,13 +55,14 @@ public class Employee extends Model {
 
     @Override
     public boolean verify() {
+        clearErrors();
         if (firstName == null || "".equals(firstName)) {
             addError("FirstName can't be null or blank!");
         }
         if (lastName == null || "".equals(lastName)) {
             addError("LastName can't be null!");
         }
-        if (email == null || "".equals(email)) {
+        if (email == null || "".equals(email) || !email.contains("@")) {
             addError("Email can't be null!");
         }
         return !hasErrors();
@@ -92,10 +93,11 @@ public class Employee extends Model {
         if (verify()) {
             try (Connection conn = DB.connect();
                  PreparedStatement stmt = conn.prepareStatement(
-                         "INSERT INTO employees (FirstName, LastName, Email) VALUES (?, ?, ?)")) {
+                         "INSERT INTO employees (FirstName, LastName, Email, ReportsTo) VALUES (?, ?, ?, ?)")) {
                 stmt.setString(1, this.getFirstName());
                 stmt.setString(2, this.getLastName());
                 stmt.setString(3, this.getEmail());
+                stmt.setLong(4, this.getReportTo());
                 stmt.executeUpdate();
                 employeeId = DB.getLastID(conn);
                 return true;
@@ -142,9 +144,10 @@ public class Employee extends Model {
         return Customer.forEmployee(employeeId);
     }
 
-    public Long getReportsTo() {
+    public Long getReportTo() {
         return reportsTo;
     }
+    public void setReportsTo(Long reportTo) { this.reportsTo = reportTo; }
 
     public List<Employee> getReports() {
         try (Connection conn = DB.connect();
@@ -200,7 +203,19 @@ public class Employee extends Model {
     }
 
     public static Employee findByEmail(String newEmailAddress) {
-        throw new UnsupportedOperationException("Implement me");
+        try (Connection conn = DB.connect();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM employees " +
+                     "WHERE Email = ?")) {
+            stmt.setString(1, newEmailAddress);
+            ResultSet results = stmt.executeQuery();
+            if (results.next()) {
+                return new Employee(results);
+            } else {
+                return null;
+            }
+        } catch (SQLException sqlException) {
+            throw new RuntimeException(sqlException);
+        }
     }
 
     public static Employee find(long employeeId) {
@@ -224,10 +239,6 @@ public class Employee extends Model {
 
     public void setReportsTo(Employee employee) {
         this.reportsTo = employee.getEmployeeId();
-    }
-
-    public long getReportTo() {
-        return reportsTo;
     }
 
     public static class SalesSummary {

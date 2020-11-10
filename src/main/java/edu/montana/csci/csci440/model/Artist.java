@@ -13,8 +13,6 @@ import java.util.List;
 
 public class Artist extends Model {
 
-    //TODO: TEST 1, 2, AND 4 FAIL
-
     Long artistId;
     String name;
 
@@ -29,7 +27,7 @@ public class Artist extends Model {
 
     @Override
     public boolean verify() {
-
+        clearErrors();
         if (name == null || "".equals(name)) {
             addError("Name can't be null or blank!");
         }

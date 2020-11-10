@@ -64,7 +64,7 @@ public class EmployeesController {
 
         post("/employees/:id", (req, resp) -> {
             Employee emp = Employee.find(Integer.parseInt(req.params(":id")));
-            Web.putValuesInto(emp, "FirstName", "LastName");
+            Web.putValuesInto(emp, "FirstName", "LastName", "Email");
             if (emp.update()) {
                 Web.message("Updated Employee!");
                 return Web.redirect("/employees/" + emp.getEmployeeId());

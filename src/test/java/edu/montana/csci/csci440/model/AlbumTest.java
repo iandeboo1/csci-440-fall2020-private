@@ -41,7 +41,6 @@ public class AlbumTest extends DBTest {
 
     @Test
     void testValidationWorks() {
-        //TODO: ERRORS SET TO 2 ON LINE 50 AND ERRORS STILL EXIST ON LINE 55 BECAUSE THEY AREN'T CLEARED, THERE'S ACTUALLY NO WAY TO CLEAR THEM
         Album album = new Album();
 
         assertFalse(album.verify());

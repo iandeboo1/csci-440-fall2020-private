@@ -18,8 +18,6 @@ import java.util.List;
 
 public class Track extends Model {
 
-    //TODO: TEST 5 FAILS
-
     private Long trackId;
     private Long albumId;
     private Long mediaTypeId;
@@ -56,6 +54,7 @@ public class Track extends Model {
 
     @Override
     public boolean verify() {
+        clearErrors();
         if (name == null || "".equals(name)) {
             addError("Name can't be null or blank!");
         }

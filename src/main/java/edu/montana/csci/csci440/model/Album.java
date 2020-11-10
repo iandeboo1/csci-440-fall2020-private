@@ -13,8 +13,6 @@ import java.util.List;
 
 public class Album extends Model {
 
-    //TODO: TEST 4 FAILS
-
     Long albumId;
     Long artistId;
     String title;
@@ -31,6 +29,7 @@ public class Album extends Model {
 
     @Override
     public boolean verify() {
+        clearErrors();
         if (title == null || "".equals(title)) {
             addError("Title can't be null or blank!");
         }
@@ -49,7 +48,7 @@ public class Album extends Model {
                 stmt.setString(1, this.getTitle());
                 //TODO: ONLY CHANGES THE TITLE, WON'T SAVE CHANGES TO ARTIST
                 System.out.println(this.getAlbumId());
-                stmt.setLong(2, this.getAlbumId());
+                stmt.setLong(2, this.getArtistId());
                 stmt.setLong(3, this.getAlbumId());
                 stmt.executeUpdate();
                 return true;

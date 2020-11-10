@@ -57,7 +57,6 @@ public class TrackTest extends DBTest {
 
     @Test
     void testValidationWorks() {
-        //TODO: ERRORS SET TO 2 ON LINE 51 AND ERRORS STILL EXIST ON LINE 56 BECAUSE THEY AREN'T CLEARED, THERE'S ACTUALLY NO WAY TO CLEAR THEM
         Track track = new Track();
 
         assertFalse(track.verify());

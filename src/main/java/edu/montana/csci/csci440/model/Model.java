@@ -31,6 +31,10 @@ public class Model {
         return _errors;
     }
 
+    public void clearErrors() {
+        _errors.clear();
+    }
+
     public boolean hasErrors(){
         return _errors.size() > 0;
     }

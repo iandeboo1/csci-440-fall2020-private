@@ -26,9 +26,8 @@ FROM employees
          JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId
 WHERE employees.EmployeeId = 2;
 
-SELECT FirstName
-FROM employees
-WHERE employees.ReportsTo = 2;
+SELECT EmployeeId, FirstName, ReportsTo
+FROM employees;
 
 SELECT bosses.*
 FROM employees
@@ -81,7 +80,7 @@ FROM invoice_items
 JOIN tracks ON invoice_items.TrackId = tracks.TrackId JOIN albums ON tracks.AlbumId = albums.AlbumId
 JOIN artists ON albums.ArtistId = artists.ArtistId WHERE InvoiceId = 5;
 
-SELECT COUNT(*) as SalesCount, employees.FirstName AS FirstName, employees.LastName AS LastName, employees.Email as Email, SUM(Total) AS SalesTotal
+SELECT COUNT(*) as SalesCount, employees.FirstName AS FirstName, employees.LastName AS LastName, employees.Email as Email, ROUND(SUM(Total), 2) AS SalesTotal
 FROM invoices
 JOIN customers ON invoices.CustomerId = customers.CustomerId
 JOIN employees ON customers.SupportRepId = employees.EmployeeId
@@ -132,4 +131,9 @@ WHERE genres.Name = 'Rock';
 
 SELECT *
 FROM employees;
+
+SELECT bosses.*
+FROM employees
+JOIN employees AS bosses ON employees.ReportsTo = bosses.EmployeeId
+WHERE employees.EmployeeId = 6;
 
