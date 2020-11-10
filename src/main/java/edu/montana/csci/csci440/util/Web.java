@@ -57,12 +57,10 @@ public class Web {
                     int i = Integer.parseInt(req.queryParams(property));
                     method.invoke(obj, i);
                 }
-                //not sure if I should be editing here
                 if (method.getParameterTypes()[0] == Long.class || method.getParameterTypes()[0] == Long.TYPE) {
                     long i = Long.parseLong(req.queryParams(property));
                     method.invoke(obj, i);
                 }
-                //not sure if I should be editing here
                 if (method.getParameterTypes()[0] == Date.class) {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     Date date = formatter.parse(req.queryParams(property));

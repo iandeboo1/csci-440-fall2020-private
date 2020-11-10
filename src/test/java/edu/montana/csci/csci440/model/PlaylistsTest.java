@@ -31,5 +31,5 @@ public class PlaylistsTest extends DBTest {
         assertEquals(8, Playlist.all(2, 10).size());
         assertEquals(0, Playlist.all(42, 10).size());
     }
-
 }
+
