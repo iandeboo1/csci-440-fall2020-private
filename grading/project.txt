@@ -1,57 +1,41 @@
-[[1;34mINFO[m] Scanning for projects...
-[[1;34mINFO[m] 
-[[1;34mINFO[m] [1m--------------------< [0;36mcs.msu.edu:CSCI_440_Project[0;1m >---------------------[m
-[[1;34mINFO[m] [1mBuilding CSCI_440_Project 1.0-SNAPSHOT[m
-[[1;34mINFO[m] [1m--------------------------------[ jar ]---------------------------------[m
-[[1;34mINFO[m] 
-[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:resources[m [1m(default-resources)[m @ [36mCSCI_440_Project[0;1m ---[m
-[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-[[1;34mINFO[m] Copying 33 resources
-[[1;34mINFO[m] 
-[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.1:compile[m [1m(default-compile)[m @ [36mCSCI_440_Project[0;1m ---[m
-[[1;34mINFO[m] Changes detected - recompiling the module!
-[[1;33mWARNING[m] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[[1;34mINFO[m] Compiling 23 source files to /home/carson/Projects/msu/csci-440-fall2020/grading/scripts/repos/ian_deboo/target/classes
-[[1;34mINFO[m] 
-[[1;34mINFO[m] [1m--- [0;32mmaven-resources-plugin:2.6:testResources[m [1m(default-testResources)[m @ [36mCSCI_440_Project[0;1m ---[m
-[[1;33mWARNING[m] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
-[[1;34mINFO[m] skip non existing resourceDirectory /home/carson/Projects/msu/csci-440-fall2020/grading/scripts/repos/ian_deboo/src/test/resources
-[[1;34mINFO[m] 
-[[1;34mINFO[m] [1m--- [0;32mmaven-compiler-plugin:3.1:testCompile[m [1m(default-testCompile)[m @ [36mCSCI_440_Project[0;1m ---[m
-[[1;34mINFO[m] Changes detected - recompiling the module!
-[[1;33mWARNING[m] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
-[[1;34mINFO[m] Compiling 11 source files to /home/carson/Projects/msu/csci-440-fall2020/grading/scripts/repos/ian_deboo/target/test-classes
-[[1;34mINFO[m] 
-[[1;34mINFO[m] [1m--- [0;32mmaven-surefire-plugin:2.22.1:test[m [1m(default-test)[m @ [36mCSCI_440_Project[0;1m ---[m
-[[1;34mINFO[m] 
-[[1;34mINFO[m] -------------------------------------------------------
-[[1;34mINFO[m]  T E S T S
-[[1;34mINFO[m] -------------------------------------------------------
-[[1;34mINFO[m] Running edu.montana.csci.csci440.model.[1mInvoicesTest[m
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< cs.msu.edu:CSCI_440_Project >---------------------
+[INFO] Building CSCI_440_Project 1.0-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ CSCI_440_Project ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 33 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ CSCI_440_Project ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ CSCI_440_Project ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/carson/Projects/msu/csci-440-fall2020/grading/scripts/repos/ian_deboo/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ CSCI_440_Project ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.22.1:test (default-test) @ CSCI_440_Project ---
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running edu.montana.csci.csci440.model.InvoicesTest
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[[1;34mINFO[m] [1;32mTests run: [0;1;32m3[m, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.128 s - in edu.montana.csci.csci440.model.[1mInvoicesTest[m
-[[1;34mINFO[m] Running edu.montana.csci.csci440.model.[1mArtistTest[m
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.172 s - in edu.montana.csci.csci440.model.InvoicesTest
+[INFO] Running edu.montana.csci.csci440.model.ArtistTest
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[[1;31mERROR[m] [1;31mTests [0;1mrun: [0;1m5[m, [1;31mFailures: [0;1;31m3[m, Errors: 0, Skipped: 0, Time elapsed: 0.084 s[1;31m <<< FAILURE![m - in edu.montana.csci.csci440.model.[1mArtistTest[m
-[[1;31mERROR[m] testAllLoadsAllArtists  Time elapsed: 0.027 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <347> but was: <275>
-	at edu.montana.csci.csci440.model.ArtistTest.testAllLoadsAllArtists(ArtistTest.java:16)
-
-[[1;31mERROR[m] testValidationWorks  Time elapsed: 0.008 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
-	at edu.montana.csci.csci440.model.ArtistTest.testValidationWorks(ArtistTest.java:52)
-
-[[1;31mERROR[m] testPagingWorks  Time elapsed: 0.015 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <100> but was: <75>
-	at edu.montana.csci.csci440.model.ArtistTest.testPagingWorks(ArtistTest.java:24)
-
-[[1;34mINFO[m] Running edu.montana.csci.csci440.model.[1mEmployeeTest[m
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.042 s - in edu.montana.csci.csci440.model.ArtistTest
+[INFO] Running edu.montana.csci.csci440.model.EmployeeTest
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
@@ -59,58 +43,26 @@ Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[[1;31mERROR[m] [1;31mTests [0;1mrun: [0;1m7[m, [1;31mFailures: [0;1;31m3[m, [1;31mErrors: [0;1;31m1[m, Skipped: 0, Time elapsed: 0.104 s[1;31m <<< FAILURE![m - in edu.montana.csci.csci440.model.[1mEmployeeTest[m
-[[1;31mERROR[m] testUpdateWorks  Time elapsed: 0.01 s  <<< ERROR!
-java.lang.UnsupportedOperationException: Implement me
-	at edu.montana.csci.csci440.model.EmployeeTest.testUpdateWorks(EmployeeTest.java:77)
-
-[[1;31mERROR[m] testCreateWorks  Time elapsed: 0.092 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <edu.montana.csci.csci440.model.Employee@0> but was: <null>
-	at edu.montana.csci.csci440.model.EmployeeTest.testCreateWorks(EmployeeTest.java:44)
-
-[[1;31mERROR[m] testValidationWorks  Time elapsed: 0 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <1> but was: <4>
-	at edu.montana.csci.csci440.model.EmployeeTest.testValidationWorks(EmployeeTest.java:58)
-
-[[1;31mERROR[m] testEmployeeSalesReport  Time elapsed: 0 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <833.04> but was: <833.040000000001>
-	at edu.montana.csci.csci440.model.EmployeeTest.testEmployeeSalesReport(EmployeeTest.java:94)
-
-[[1;34mINFO[m] Running edu.montana.csci.csci440.model.[1mTrackTest[m
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 s - in edu.montana.csci.csci440.model.EmployeeTest
+[INFO] Running edu.montana.csci.csci440.model.TrackTest
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-null
-3504
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[[1;31mERROR[m] [1;31mTests [0;1mrun: [0;1m9[m, [1;31mFailures: [0;1;31m3[m, Errors: 0, Skipped: 0, Time elapsed: 0.094 s[1;31m <<< FAILURE![m - in edu.montana.csci.csci440.model.[1mTrackTest[m
-[[1;31mERROR[m] testTrackListsWorks  Time elapsed: 0.004 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <3> but was: <0>
-	at edu.montana.csci.csci440.model.TrackTest.testTrackListsWorks(TrackTest.java:96)
-
-[[1;31mERROR[m] testValidationWorks  Time elapsed: 0.002 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
-	at edu.montana.csci.csci440.model.TrackTest.testValidationWorks(TrackTest.java:56)
-
-[[1;31mERROR[m] testPagingWorks  Time elapsed: 0.014 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <0> but was: <100>
-	at edu.montana.csci.csci440.model.TrackTest.testPagingWorks(TrackTest.java:25)
-
-[[1;34mINFO[m] Running edu.montana.csci.csci440.model.[1mPlaylistsTest[m
+Resetting DB After Test...
+Resetting DB After Test...
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.14 s - in edu.montana.csci.csci440.model.TrackTest
+[INFO] Running edu.montana.csci.csci440.model.PlaylistsTest
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[[1;31mERROR[m] [1;31mTests [0;1mrun: [0;1m3[m, Failures: 0, [1;31mErrors: [0;1;31m1[m, Skipped: 0, Time elapsed: 0.006 s[1;31m <<< FAILURE![m - in edu.montana.csci.csci440.model.[1mPlaylistsTest[m
-[[1;31mERROR[m] testPlaylistFieldsLoad  Time elapsed: 0.002 s  <<< ERROR!
-java.lang.NullPointerException
-	at edu.montana.csci.csci440.model.PlaylistsTest.testPlaylistFieldsLoad(PlaylistsTest.java:22)
-
-[[1;34mINFO[m] Running edu.montana.csci.csci440.model.[1mAlbumTest[m
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s - in edu.montana.csci.csci440.model.PlaylistsTest
+[INFO] Running edu.montana.csci.csci440.model.AlbumTest
 Resetting DB After Test...
 1
 Resetting DB After Test...
@@ -118,50 +70,20 @@ null
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[[1;31mERROR[m] [1;31mTests [0;1mrun: [0;1m5[m, [1;31mFailures: [0;1;31m1[m, Errors: 0, Skipped: 0, Time elapsed: 0.04 s[1;31m <<< FAILURE![m - in edu.montana.csci.csci440.model.[1mAlbumTest[m
-[[1;31mERROR[m] testValidationWorks  Time elapsed: 0.002 s  <<< FAILURE!
-org.opentest4j.AssertionFailedError: expected: <true> but was: <false>
-	at edu.montana.csci.csci440.model.AlbumTest.testValidationWorks(AlbumTest.java:54)
-
-[[1;34mINFO[m] Running edu.montana.csci.csci440.model.[1mCustomerTest[m
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.045 s - in edu.montana.csci.csci440.model.AlbumTest
+[INFO] Running edu.montana.csci.csci440.model.CustomerTest
 Resetting DB After Test...
 Resetting DB After Test...
 Resetting DB After Test...
-[[1;34mINFO[m] [1;32mTests run: [0;1;32m3[m, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s - in edu.montana.csci.csci440.model.[1mCustomerTest[m
-[[1;34mINFO[m] 
-[[1;34mINFO[m] Results:
-[[1;34mINFO[m] 
-[[1;31mERROR[m] [1;31mFailures: [m
-[[1;31mERROR[m] [1;31m  AlbumTest.testValidationWorks:54 expected: <true> but was: <false>[m
-[[1;31mERROR[m] [1;31m  ArtistTest.testAllLoadsAllArtists:16 expected: <347> but was: <275>[m
-[[1;31mERROR[m] [1;31m  ArtistTest.testPagingWorks:24 expected: <100> but was: <75>[m
-[[1;31mERROR[m] [1;31m  ArtistTest.testValidationWorks:52 expected: <true> but was: <false>[m
-[[1;31mERROR[m] [1;31m  EmployeeTest.testCreateWorks:44 expected: <edu.montana.csci.csci440.model.Employee@0> but was: <null>[m
-[[1;31mERROR[m] [1;31m  EmployeeTest.testEmployeeSalesReport:94 expected: <833.04> but was: <833.040000000001>[m
-[[1;31mERROR[m] [1;31m  EmployeeTest.testValidationWorks:58 expected: <1> but was: <4>[m
-[[1;31mERROR[m] [1;31m  TrackTest.testPagingWorks:25 expected: <0> but was: <100>[m
-[[1;31mERROR[m] [1;31m  TrackTest.testTrackListsWorks:96 expected: <3> but was: <0>[m
-[[1;31mERROR[m] [1;31m  TrackTest.testValidationWorks:56 expected: <true> but was: <false>[m
-[[1;31mERROR[m] [1;31mErrors: [m
-[[1;31mERROR[m] [1;31m  EmployeeTest.testUpdateWorks:77 » UnsupportedOperation Implement me[m
-[[1;31mERROR[m] [1;31m  PlaylistsTest.testPlaylistFieldsLoad:22 » NullPointer[m
-[[1;34mINFO[m] 
-[[1;31mERROR[m] [1;31mTests run: 35, Failures: 10, Errors: 2, Skipped: 0[m
-[[1;34mINFO[m] 
-[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
-[[1;34mINFO[m] [1;31mBUILD FAILURE[m
-[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
-[[1;34mINFO[m] Total time:  3.812 s
-[[1;34mINFO[m] Finished at: 2020-11-12T21:12:07-07:00
-[[1;34mINFO[m] [1m------------------------------------------------------------------------[m
-[[1;31mERROR[m] Failed to execute goal [32morg.apache.maven.plugins:maven-surefire-plugin:2.22.1:test[m [1m(default-test)[m on project [36mCSCI_440_Project[m: [1;31mThere are test failures.[m
-[[1;31mERROR[m] [1;31m[m
-[[1;31mERROR[m] [1;31mPlease refer to /home/carson/Projects/msu/csci-440-fall2020/grading/scripts/repos/ian_deboo/target/surefire-reports for the individual test results.[m
-[[1;31mERROR[m] [1;31mPlease refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.[m
-[[1;31mERROR[m] -> [1m[Help 1][m
-[[1;31mERROR[m] 
-[[1;31mERROR[m] To see the full stack trace of the errors, re-run Maven with the [1m-e[m switch.
-[[1;31mERROR[m] Re-run Maven using the [1m-X[m switch to enable full debug logging.
-[[1;31mERROR[m] 
-[[1;31mERROR[m] For more information about the errors and possible solutions, please read the following articles:
-[[1;31mERROR[m] [1m[Help 1][m http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 s - in edu.montana.csci.csci440.model.CustomerTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 37, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.443 s
+[INFO] Finished at: 2020-11-13T17:24:10-07:00
+[INFO] ------------------------------------------------------------------------
